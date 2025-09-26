@@ -1,0 +1,32 @@
+<!-- login.html -->
+<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div class="bg-white rounded-xl w-[400px] p-6 relative shadow-lg">
+
+    <!-- X düyməsi -->
+    <button (click)="closeLogin()"
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 font-bold">
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-semibold mb-4">Login</h2>
+
+    <form (ngSubmit)="loginUser()" class="flex flex-col space-y-4">
+      <!-- Email -->
+      <input type="text" placeholder="Email" [(ngModel)]="email" name="email"
+             class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+      
+      <!-- Şifrə -->
+      <input type="password" placeholder="Şifrə" [(ngModel)]="password" name="password"
+             class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+
+      <!-- Xəta mesajı -->
+      <div *ngIf="error" class="text-red-600">{{ error }}</div>
+
+      <!-- Login düyməsi -->
+      <button type="submit"
+              class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+        Login
+      </button>
+    </form>
+  </div>
+</div>

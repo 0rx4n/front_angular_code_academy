@@ -1,0 +1,75 @@
+<header class="bg-blue-600 text-white px-[200px] py-4 flex items-center justify-between relative">
+  <!-- Logo -->
+  <div class="text-2xl font-bold cursor-pointer">
+    CarSale
+  </div>
+
+  <!-- Hamburger (mobile only) -->
+  <button class="block md:hidden text-white focus:outline-none" (click)="toggleMenu()">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+
+  <!-- Menu (desktop) -->
+  <nav class="hidden md:flex items-center space-x-6">
+    <a class="hover:text-gray-200 transition-colors cursor-pointer">Bütün elanlar</a>
+    <a class="hover:text-gray-200 transition-colors cursor-pointer">Avtokatalog</a>
+    <a class="hover:text-gray-200 transition-colors cursor-pointer">Moto</a>
+    <a class="hover:text-gray-200 transition-colors cursor-pointer">Seçilmişlər</a>
+    <a class="hover:text-gray-200 transition-colors cursor-pointer">Yeni Lan</a>
+  </nav>
+
+  <!-- Profile / Auth Buttons (Desktop) -->
+  <div class="hidden md:flex items-center space-x-4">
+    <ng-container *ngIf="!authService.isLoggedIn(); else loggedIn">
+      <a routerLink="/login"
+         class="px-3 py-1 rounded bg-white text-blue-600 font-medium hover:bg-gray-200 transition">
+        Login
+      </a>
+      <a routerLink="/register"
+         class="px-3 py-1 rounded bg-green-500 text-white font-medium hover:bg-green-600 transition">
+        Register
+      </a>
+    </ng-container>
+
+    <ng-template #loggedIn>
+      <button (click)="logout()"
+              class="bg-red-600 px-3 py-1 rounded hover:bg-red-700 transition">
+        Logout
+      </button>
+    </ng-template>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div [class.hidden]="!menuOpen()"
+       class="absolute top-full left-0 w-full bg-blue-600 md:hidden flex flex-col items-start px-6 py-4 space-y-2 shadow-lg">
+    <a class="hover:text-gray-200 transition-colors cursor-pointer">Bütün elanlar</a>
+    <a class="hover:text-gray-200 transition-colors cursor-pointer">Avtokatalog</a>
+    <a class="hover:text-gray-200 transition-colors cursor-pointer">Moto</a>
+    <a class="hover:text-gray-200 transition-colors cursor-pointer">Seçilmişlər</a>
+    <a class="hover:text-gray-200 transition-colors cursor-pointer">Yeni Lan</a>
+
+    <!-- Mobile Auth Buttons -->
+    <div class="flex flex-col space-y-2 mt-4 w-full">
+      <ng-container *ngIf="!authService.isLoggedIn(); else mobileLoggedIn">
+        <a routerLink="/login"
+           class="block w-full px-3 py-2 rounded bg-white text-blue-600 font-medium hover:bg-gray-200 transition text-center">
+          Login
+        </a>
+        <a routerLink="/register"
+           class="block w-full px-3 py-2 rounded bg-green-500 text-white font-medium hover:bg-green-600 transition text-center">
+          Register
+        </a>
+      </ng-container>
+
+      <ng-template #mobileLoggedIn>
+        <button (click)="logout()"
+                class="bg-red-600 px-3 py-2 rounded hover:bg-red-700 w-full transition">
+          Logout
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,31 @@
+<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div class="bg-white rounded-xl w-[400px] p-6 relative shadow-lg">
+
+    <!-- X düyməsi -->
+    <button (click)="closeRegister()"
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 font-bold">
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-semibold mb-4">Register</h2>
+
+    <form (ngSubmit)="registerUser()" class="flex flex-col space-y-4">
+      <input type="text" placeholder="Ad Soyad" [(ngModel)]="name" name="name"
+             class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+
+      <input type="email" placeholder="Email" [(ngModel)]="email" name="email"
+             class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+
+      <input type="password" placeholder="Şifrə" [(ngModel)]="password" name="password"
+             class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+
+      <div *ngIf="error" class="text-red-600">{{ error }}</div>
+      <div *ngIf="success" class="text-green-600">{{ success }}</div>
+
+      <button type="submit"
+              class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+        Qeydiyyat
+      </button>
+    </form>
+  </div>
+</div>
