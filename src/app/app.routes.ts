@@ -1,10 +1,11 @@
 
 import { Route, Routes } from '@angular/router';
-import { Home } from './pages/home/home';
-import { About } from './pages/about/about';
-import { Layout } from './components/layout/layout';
-import { Login } from './pages/login/login';
-import { Register } from './pages/register/register'; // ✅ yeni əlavə
+import { Home } from './features/home/home';
+import { About } from './features/about/about';
+import { Login } from './features/login/login';
+import { Register } from './features/register/register';
+import { Layout } from './shared/components/layout/layout';
+
 
 export const routes: Routes = [
   {
