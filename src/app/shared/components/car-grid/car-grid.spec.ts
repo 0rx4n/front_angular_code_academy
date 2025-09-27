@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LayoutSpecial } from './layout-special';
+import { CarGrid } from './car-grid';
 
-describe('LayoutSpecial', () => {
-  let component: LayoutSpecial;
-  let fixture: ComponentFixture<LayoutSpecial>;
+describe('CarGrid', () => {
+  let component: CarGrid;
+  let fixture: ComponentFixture<CarGrid>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LayoutSpecial]
+      imports: [CarGrid]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LayoutSpecial);
+    fixture = TestBed.createComponent(CarGrid);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,66 +1,102 @@
-
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'; // <-- HttpClientModule əlavə olunur
+import { Observable, map, startWith } from 'rxjs';
 import { Post } from '../../models/post';
 import { PostService } from '../../core/services/post.service';
-
+import { FilterBar, Filters } from '../../shared/components/filter-bar/filter-bar';
+import { CarGrid } from '../../shared/components/car-grid/car-grid';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.html',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule], // <-- HttpClientModule burada
+  templateUrl: './home.html',
+  styleUrls: ['./home.scss'],
+  imports: [CommonModule, FilterBar, CarGrid],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Home implements OnInit {
-  posts: Post[] = [];
-  filteredPosts: Post[] = [];
+  posts$!: Observable<Post[]>;
+  filteredPosts$!: Observable<Post[]>;
 
-  // Əsas filterlər
-  marka: string = '';
-  model: string = '';
-  seher: string = '';
+  marka = '';
+  model = '';
+  city = '';
+  ban = '';
+  minYear: number | null = null;
+  maxYear: number | null = null;
   minPrice: number | null = null;
   maxPrice: number | null = null;
-  banNovu: string = '';
-  minIl: number | null = null;
-  maxIl: number | null = null;
 
-  // Əlavə filterlər
-  reng: string = '';
-  muharikHecmi: number | null = null;
-  oturucu: string = '';
-  suretQutusu: string = '';
-  yanacaq: string = '';
-  atGucu: number | null = null;
-  yurush: number | null = null;
-
-  // Toggle
-  showMoreFilters = false;
+  markaOptions: string[] = [];
+  modelOptions: string[] = [];
+  cityOptions: string[] = [];
+  banOptions: string[] = [];
 
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
-    this.postService.getPosts().subscribe((data) => {
-      // MockAPI-dən gələn data ilə işləyirik
-      this.posts = data;
-      this.filteredPosts = data;
-    });
+    this.posts$ = this.postService.getPosts();
+    this.filteredPosts$ = this.posts$.pipe(
+      map(posts => {
+        this.markaOptions = this.getUniqueValues('marka', posts);
+        this.cityOptions  = this.getUniqueValues('city', posts);
+        this.banOptions   = this.getUniqueValues('ban', posts);
+        this.updateModelOptions(posts);
+        return this.filterPosts(posts);
+      }),
+      startWith([] as Post[])
+    );
   }
 
-  toggleFilters(): void {
-    this.showMoreFilters = !this.showMoreFilters;
+  private getUniqueValues(field: 'marka' | 'model' | 'city' | 'ban' | 'year', posts: Post[]): string[] {
+    return [...new Set(posts.map(p => p[field] as string))].filter(Boolean);
   }
 
-  applyFilters(): void {
-    this.filteredPosts = this.posts.filter((post) => {
-      const meetsPriceMin = this.minPrice == null || post.price >= this.minPrice;
-      const meetsPriceMax = this.maxPrice == null || post.price <= this.maxPrice;
-      const meetsMarka = !this.marka || post.marka.toLowerCase().includes(this.marka.toLowerCase());
-      const meetsModel = !this.model || post.model.toLowerCase().includes(this.model.toLowerCase());
-      const meetsSeher = !this.seher || post.city.toLowerCase().includes(this.seher.toLowerCase());
-      return meetsPriceMin && meetsPriceMax && meetsMarka && meetsModel && meetsSeher;
-    });
+  private updateModelOptions(posts: Post[]) {
+    if (this.marka) {
+      this.modelOptions = [...new Set(posts.filter(p => p.marka === this.marka).map(p => p.model))];
+    } else {
+      this.modelOptions = this.getUniqueValues('model', posts);
+    }
   }
+
+  onMarkaChange(selectedMarka: string) {
+    this.marka = selectedMarka;
+    this.model = '';
+    this.posts$.subscribe(posts => this.updateModelOptions(posts));
+  }
+
+  onApply(f: Filters) {
+    this.marka = f.marka ?? '';
+    this.model = f.model ?? '';
+    this.city = f.city ?? '';
+    this.ban = f.ban ?? '';
+    this.minYear = f.minYear ?? null;
+    this.maxYear = f.maxYear ?? null;
+    this.minPrice = f.minPrice ?? null;
+    this.maxPrice = f.maxPrice ?? null;
+
+    this.filteredPosts$ = this.posts$.pipe(
+      map(posts => this.filterPosts(posts)),
+      startWith([] as Post[])
+    );
+  }
+
+private filterPosts(posts: Post[]): Post[] {
+  return posts.filter((post) => {
+    const meetsPriceMin = this.minPrice == null || post.price >= this.minPrice;
+    const meetsPriceMax = this.maxPrice == null || post.price <= this.maxPrice;
+    const meetsMarka = !this.marka || post.marka.toLowerCase().includes(this.marka.toLowerCase());
+    const meetsModel = !this.model || post.model.toLowerCase().includes(this.model.toLowerCase());
+    const meetsCity  = !this.city  || post.city.toLowerCase().includes(this.city.toLowerCase());
+    const meetsBan   = !this.ban   || post.ban.toLowerCase().includes(this.ban.toLowerCase());
+    const meetsYearMin = this.minYear == null || +post.year >= this.minYear;
+    const meetsYearMax = this.maxYear == null || +post.year <= this.maxYear;
+
+    return meetsPriceMin && meetsPriceMax &&
+           meetsMarka && meetsModel && meetsCity && meetsBan &&
+           meetsYearMin && meetsYearMax;
+  });
+}
+
 }

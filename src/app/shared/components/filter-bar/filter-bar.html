@@ -1,0 +1,62 @@
+<div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+<!-- Marka -->
+<select [(ngModel)]="local.marka" (change)="markaChange.emit(local.marka)"
+        class="w-full p-2 rounded border bg-white cursor-pointer">
+  <option value="">Marka seç</option>
+  <option *ngFor="let m of markaOptions" [value]="m">{{ m }}</option>
+</select>
+
+<!-- Model (disabled əgər marka seçilməyibsə) -->
+<select [(ngModel)]="local.model"
+        [disabled]="!local.marka"
+        class="w-full p-2 rounded border bg-white"
+        [class.cursor-pointer]="!!local.marka"
+        [class.cursor-not-allowed]="!local.marka">
+  <option value="">Model seç</option>
+  <option *ngFor="let m of modelOptions" [value]="m">{{ m }}</option>
+</select>
+
+
+  <!-- Şəhər -->
+  <select [(ngModel)]="local.city"
+          class="w-full p-2 rounded border bg-white cursor-pointer">
+    <option value="">Şəhər seç</option>
+    <option *ngFor="let c of cityOptions" [value]="c">{{ c }}</option>
+  </select>
+
+  <!-- Ban -->
+  <select [(ngModel)]="local.ban"
+          class="w-full p-2 rounded border bg-white cursor-pointer">
+    <option value="">Ban tipi seç</option>
+    <option *ngFor="let b of banOptions" [value]="b">{{ b }}</option>
+  </select>
+
+  <!-- Minimum İl -->
+  <input [(ngModel)]="local.minYear" type="number" placeholder="Min il"
+         class="w-full p-2 rounded border bg-white cursor-text" />
+
+  <!-- Maksimum İl -->
+  <input [(ngModel)]="local.maxYear" type="number" placeholder="Max il"
+         class="w-full p-2 rounded border bg-white cursor-text" />
+
+  <!-- Minimum Qiymət -->
+  <input [(ngModel)]="local.minPrice" type="number" placeholder="Min qiymət"
+         class="w-full p-2 rounded border bg-white cursor-text" />
+
+  <!-- Maksimum Qiymət -->
+  <input [(ngModel)]="local.maxPrice" type="number" placeholder="Max qiymət"
+         class="w-full p-2 rounded border bg-white cursor-text" />
+</div>
+
+<!-- Düymələr -->
+<div class="mt-4 flex items-center gap-4">
+  <button (click)="emitApply()"
+          class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 cursor-pointer">
+    Göstər
+  </button>
+  <button (click)="resetFilters()"
+          class="bg-white text-gray-800 border px-4 py-2 rounded hover:bg-gray-100 cursor-pointer">
+    Sıfırla
+  </button>
+  <span class="text-gray-600 text-sm">Tapılan: {{ count }}</span>
+</div>
