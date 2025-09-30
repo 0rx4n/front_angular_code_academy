@@ -11,33 +11,38 @@ import { AuthService } from '../../core/services/auth.service';
   imports: [CommonModule, FormsModule, RouterModule],
 })
 export class Login {
-  email: string = '';
-  password: string = '';
+  login: string = '';
+  parol: string = '';
   error: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   loginUser() {
-    if (!this.email || !this.password) {
-      this.error = 'Email və şifrə daxil edin!';
+    if (!this.login || !this.parol) {
+      this.error = 'Login və şifrə daxil edin!';
       return;
     }
 
-    // AuthService login funksiyasını düzgün çağırırıq
-    this.authService.login(this.email, this.password).subscribe({
+    this.authService.login(this.login, this.parol).subscribe({
       next: (res) => {
-        console.log('Logged in:', res);
-        this.router.navigate(['/']); // login sonrası home page
+        if (res) {
+          console.log('Logged in:', res);
+          this.router.navigate(['/']);
+        }
       },
       error: (err) => {
-        console.error('Login failed:', err);
-        this.error = 'İstifadəçi adı və ya şifrə səhvdir!';
+        if (err.message.includes('tapılmadı')) {
+          this.error = 'Belə istifadəçi yoxdur!';
+        } else if (err.message.includes('Şifrə')) {
+          this.error = 'Şifrə yanlışdır!';
+        } else {
+          this.error = 'Login zamanı xəta baş verdi!';
+        }
       },
     });
   }
 
   closeLogin() {
-    // X düyməsi kliklənəndə guest olaraq home page-ə yönləndirir
     this.router.navigate(['/']);
   }
 }

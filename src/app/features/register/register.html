@@ -1,7 +1,5 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
   <div class="bg-white rounded-xl w-[400px] p-6 relative shadow-lg">
-
-    <!-- X düyməsi -->
     <button (click)="closeRegister()"
             class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 font-bold">
       &times;
@@ -10,13 +8,22 @@
     <h2 class="text-2xl font-semibold mb-4">Register</h2>
 
     <form (ngSubmit)="registerUser()" class="flex flex-col space-y-4">
-      <input type="text" placeholder="Ad Soyad" [(ngModel)]="name" name="name"
+      <input type="text" placeholder="Login" [(ngModel)]="login" name="login"
              class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
 
-      <input type="email" placeholder="Email" [(ngModel)]="email" name="email"
+      <input type="password" placeholder="Parol" [(ngModel)]="parol" name="parol"
              class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
 
-      <input type="password" placeholder="Şifrə" [(ngModel)]="password" name="password"
+      <input type="text" placeholder="Ad" [(ngModel)]="name" name="name"
+             class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+
+      <input type="text" placeholder="Soyad" [(ngModel)]="last_name" name="last_name"
+             class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+
+      <input type="tel" placeholder="Telefon" [(ngModel)]="phone" name="phone"
+             class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+
+      <input type="email" placeholder="Email" [(ngModel)]="mail" name="mail"
              class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
 
       <div *ngIf="error" class="text-red-600">{{ error }}</div>

@@ -35,6 +35,9 @@
     </ng-container>
 
     <ng-template #loggedIn>
+      <!-- ✅ Xoş gəldin mesajı -->
+      <span class="font-medium">{{ welcomeMessage }}</span>
+
       <button (click)="logout()"
               class="bg-red-600 px-3 py-1 rounded hover:bg-red-700 transition">
         Logout
@@ -65,6 +68,9 @@
       </ng-container>
 
       <ng-template #mobileLoggedIn>
+        <!-- ✅ Mobile xoş gəldin mesajı -->
+        <span class="block w-full text-center font-medium mb-2">{{ welcomeMessage }}</span>
+
         <button (click)="logout()"
                 class="bg-red-600 px-3 py-2 rounded hover:bg-red-700 w-full transition">
           Logout
