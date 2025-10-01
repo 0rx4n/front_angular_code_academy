@@ -31,15 +31,15 @@
 // }
 
 
-
 export interface Post {
-  id: number;
+  id: string;          // MockAPI-də id həmişə string olur
   marka: string;
   model: string;
   city: string;
-  price: number;
-  year: string;
   ban: string;
+  year: string;
+  price: number;
   image: string;
+  ownerId: string;     // elan sahibi user id
+  createdAt: string;   // tarix
 }
-

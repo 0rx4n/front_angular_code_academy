@@ -20,5 +20,7 @@ export const routes: Routes = [
     ]
   },
   { path: 'login', component: Login },
-  { path: 'register', component: Register } 
+  { path: 'register', component: Register },
+  { path: 'add-car', loadComponent: () => import('./features/add-car/add-car').then(m => m.AddCar) }
+
 ];

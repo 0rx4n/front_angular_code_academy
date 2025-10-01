@@ -18,7 +18,14 @@
     <a class="hover:text-gray-200 transition-colors cursor-pointer">Avtokatalog</a>
     <a class="hover:text-gray-200 transition-colors cursor-pointer">Moto</a>
     <a class="hover:text-gray-200 transition-colors cursor-pointer">Seçilmişlər</a>
-    <a class="hover:text-gray-200 transition-colors cursor-pointer">Yeni Lan</a>
+
+    <!-- ✅ Yalnız login olduqda görünəcək -->
+    <ng-container *ngIf="authService.isLoggedIn()">
+      <a routerLink="/add-car"
+         class="hover:text-gray-200 transition-colors cursor-pointer">
+        Yeni Elan
+      </a>
+    </ng-container>
   </nav>
 
   <!-- Profile / Auth Buttons (Desktop) -->
@@ -35,9 +42,7 @@
     </ng-container>
 
     <ng-template #loggedIn>
-      <!-- ✅ Xoş gəldin mesajı -->
       <span class="font-medium">{{ welcomeMessage }}</span>
-
       <button (click)="logout()"
               class="bg-red-600 px-3 py-1 rounded hover:bg-red-700 transition">
         Logout
@@ -52,7 +57,14 @@
     <a class="hover:text-gray-200 transition-colors cursor-pointer">Avtokatalog</a>
     <a class="hover:text-gray-200 transition-colors cursor-pointer">Moto</a>
     <a class="hover:text-gray-200 transition-colors cursor-pointer">Seçilmişlər</a>
-    <a class="hover:text-gray-200 transition-colors cursor-pointer">Yeni Lan</a>
+
+    <!-- ✅ Yalnız login olduqda görünəcək -->
+    <ng-container *ngIf="authService.isLoggedIn()">
+      <a routerLink="/add-car"
+         class="hover:text-gray-200 transition-colors cursor-pointer">
+        Yeni Elan
+      </a>
+    </ng-container>
 
     <!-- Mobile Auth Buttons -->
     <div class="flex flex-col space-y-2 mt-4 w-full">
@@ -68,9 +80,7 @@
       </ng-container>
 
       <ng-template #mobileLoggedIn>
-        <!-- ✅ Mobile xoş gəldin mesajı -->
         <span class="block w-full text-center font-medium mb-2">{{ welcomeMessage }}</span>
-
         <button (click)="logout()"
                 class="bg-red-600 px-3 py-2 rounded hover:bg-red-700 w-full transition">
           Logout

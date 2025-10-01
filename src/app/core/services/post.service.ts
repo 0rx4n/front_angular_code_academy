@@ -3,12 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Post } from '../../models/post';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
-  // MockAPI endpoint-inizi buraya yapışdırın
   private apiUrl = 'https://68d5481be29051d1c0adff01.mockapi.io/cardata/cars';
 
   constructor(private http: HttpClient) {}
@@ -18,6 +16,14 @@ export class PostService {
   }
 
   getPostById(id: string): Observable<Post> {
-  return this.http.get<Post>(`${this.apiUrl}/${id}`);
-}
+    return this.http.get<Post>(`${this.apiUrl}/${id}`);
+  }
+
+  addPost(post: Omit<Post, 'id'>): Observable<Post> {
+    return this.http.post<Post>(this.apiUrl, post);
+  }
+
+  deletePost(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }
