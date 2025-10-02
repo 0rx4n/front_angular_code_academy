@@ -1,24 +1,25 @@
-<!-- Ümumi konteyner -->
 <div class="mx-auto w-full max-w-[1200px]">
 
   <!-- Filter bölməsi -->
-<section class="bg-gray-200 rounded-2xl shadow-md mt-[5px] p-6">
-  <app-filter-bar
-    [filters]="{ marka, model, city, ban, minYear, maxYear, minPrice, maxPrice }"
-    [markaOptions]="markaOptions"
-    [modelOptions]="modelOptions"
-    [cityOptions]="cityOptions"
-    [banOptions]="banOptions"
-    [count]="(filteredPosts$ | async)?.length || 0"
-    (apply)="onApply($event)"
-    (markaChange)="onMarkaChange($event)">
-  </app-filter-bar>
-</section>
-
+  <section class="bg-gray-200 rounded-2xl shadow-md mt-[5px] p-6">
+    <app-filter-bar
+      [filters]="{ marka, model, city, ban, minYear, maxYear, minPrice, maxPrice }"
+      [markaOptions]="markaOptions"
+      [modelOptions]="modelOptions"
+      [cityOptions]="cityOptions"
+      [banOptions]="banOptions"
+      [count]="(filteredPosts$ | async)?.length || 0"
+      (apply)="onApply($event)"
+      (markaChange)="onMarkaChange($event)">
+    </app-filter-bar>
+  </section>
 
   <!-- Məhsullar -->
   <section class="py-6">
-    <app-car-grid [posts]="(filteredPosts$ | async) || []"></app-car-grid>
+    <div *ngIf="loading" class="text-center text-gray-600 py-10">
+      🔄 Yüklənir...
+    </div>
+    <app-car-grid *ngIf="!loading" [posts]="(filteredPosts$ | async) || []"></app-car-grid>
   </section>
 
 </div>

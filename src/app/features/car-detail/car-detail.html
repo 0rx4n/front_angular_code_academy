@@ -1,24 +1,38 @@
-<div *ngIf="post" class="max-w-4xl mx-auto p-6">
-  <!-- Şəkil -->
-  <div class="rounded-xl overflow-hidden shadow mb-6">
-    <img [src]="post.image" alt="{{ post.marka }} {{ post.model }}" class="w-full object-cover" />
+<div class="mx-auto w-full max-w-[1200px] py-6" *ngIf="post$ | async as post">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    
+    <!-- Sol tərəf: Şəkil və xüsusiyyətlər -->
+    <div class="md:col-span-2 space-y-4">
+      <!-- Böyük şəkil -->
+      <div class="w-full">
+        <img [src]="post.image" alt="car"
+             class="w-full h-[450px] object-cover rounded-lg shadow" />
+      </div>
+
+      <!-- Xüsusiyyətlər -->
+      <div class="bg-white rounded-lg shadow p-4 space-y-2">
+        <h2 class="text-2xl font-bold mb-4">{{ post.marka }} {{ post.model }}</h2>
+        <p><strong>Şəhər:</strong> {{ post.city }}</p>
+        <p><strong>Qiymət:</strong> {{ post.price | currency:'USD' }}</p>
+        <p><strong>Buraxılış ili:</strong> {{ post.year }}</p>
+        <p><strong>Ban növü:</strong> {{ post.ban }}</p>
+      </div>
+    </div>
+
+    <!-- Sağ tərəf: Elanı yerləşdirən -->
+    <div class="bg-white rounded-lg shadow p-4 space-y-3" *ngIf="user$ | async as user">
+      <h3 class="text-lg font-bold">Elanı yerləşdirən</h3>
+      <p><strong>Ad:</strong> {{ user.name }}</p>
+      <p><strong>Telefon:</strong> {{ user.phone }}</p>
+      <p><strong>Email:</strong> {{ user.mail }}</p>
+
+      <!-- Digər elanları düyməsi -->
+      <a *ngIf="user.id"
+         [routerLink]="['/user', user.id, 'ads']"
+         class="block text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+        Digər elanları
+      </a>
+    </div>
+
   </div>
-
-  <!-- Başlıq və məlumat -->
-  <h1 class="text-2xl font-bold text-gray-800 mb-2">
-    {{ post.marka }} {{ post.model }}
-  </h1>
-  <p class="text-gray-600 mb-4">
-    {{ post.city }} • {{ post.year }} • {{ post.ban }}
-  </p>
-
-  <!-- Qiymət -->
-  <p class="text-3xl font-bold text-blue-600 mb-6">
-    {{ post.price | currency:'USD' }}
-  </p>
-
-  <!-- Geri qayıt -->
-  <a routerLink="/" class="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition">
-    ← Geri qayıt
-  </a>
 </div>

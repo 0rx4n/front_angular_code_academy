@@ -1,8 +1,7 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
-import { User } from '../../../../models/user';
 
 @Component({
   selector: 'app-header',
@@ -11,23 +10,14 @@ import { User } from '../../../../models/user';
   standalone: true,
   imports: [CommonModule, RouterModule],
 })
-export class Header implements OnInit {
+export class Header {
   menuOpen = signal(false);
-  currentUser: User | null = null;
-  welcomeMessage: string = '';
 
-  constructor(public authService: AuthService, private router: Router) {}
+  // 🔑 Login state və user məlumatı avtomatik yenilənsin
+  isLoggedIn = computed(() => this.authService.isLoggedIn());
+  currentUser = computed(() => this.authService.getCurrentUser());
 
-  ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser) {
-      if (this.currentUser.role === 'role 1') {
-        this.welcomeMessage = `Xoş gəldin ${this.currentUser.name}, siz ADMİNSİNİZ!`;
-      } else {
-        this.welcomeMessage = `Xoş gəldin ${this.currentUser.name}`;
-      }
-    }
-  }
+  constructor(private authService: AuthService, private router: Router) {}
 
   toggleMenu() {
     this.menuOpen.set(!this.menuOpen());
@@ -36,5 +26,13 @@ export class Header implements OnInit {
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  get welcomeMessage(): string {
+    const user = this.currentUser();
+    if (!user) return '';
+    return user.role === 'role 1'
+      ? `Xoş gəldin ${user.name}, siz ADMİNSİNİZ!`
+      : `Xoş gəldin ${user.name}`;
   }
 }

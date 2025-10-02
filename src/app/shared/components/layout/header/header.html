@@ -1,6 +1,6 @@
 <header class="bg-blue-600 text-white px-[200px] py-4 flex items-center justify-between relative">
   <!-- Logo -->
-  <div class="text-2xl font-bold cursor-pointer">
+  <div class="text-2xl font-bold cursor-pointer" routerLink="/">
     CarSale
   </div>
 
@@ -14,13 +14,15 @@
 
   <!-- Menu (desktop) -->
   <nav class="hidden md:flex items-center space-x-6">
-    <a class="hover:text-gray-200 transition-colors cursor-pointer">Bütün elanlar</a>
+    <a routerLink="/" class="hover:text-gray-200 transition-colors cursor-pointer">Bütün elanlar</a>
     <a class="hover:text-gray-200 transition-colors cursor-pointer">Avtokatalog</a>
     <a class="hover:text-gray-200 transition-colors cursor-pointer">Moto</a>
-    <a class="hover:text-gray-200 transition-colors cursor-pointer">Seçilmişlər</a>
+     <a routerLink="/favorites" class="hover:text-gray-200 transition-colors cursor-pointer">
+  Seçilmişlər
+    </a>
 
     <!-- ✅ Yalnız login olduqda görünəcək -->
-    <ng-container *ngIf="authService.isLoggedIn()">
+    <ng-container *ngIf="isLoggedIn()">
       <a routerLink="/add-car"
          class="hover:text-gray-200 transition-colors cursor-pointer">
         Yeni Elan
@@ -30,7 +32,7 @@
 
   <!-- Profile / Auth Buttons (Desktop) -->
   <div class="hidden md:flex items-center space-x-4">
-    <ng-container *ngIf="!authService.isLoggedIn(); else loggedIn">
+    <ng-container *ngIf="!isLoggedIn(); else loggedIn">
       <a routerLink="/login"
          class="px-3 py-1 rounded bg-white text-blue-600 font-medium hover:bg-gray-200 transition">
         Login
@@ -53,13 +55,16 @@
   <!-- Mobile Menu -->
   <div [class.hidden]="!menuOpen()"
        class="absolute top-full left-0 w-full bg-blue-600 md:hidden flex flex-col items-start px-6 py-4 space-y-2 shadow-lg">
-    <a class="hover:text-gray-200 transition-colors cursor-pointer">Bütün elanlar</a>
+    <a routerLink="/" class="hover:text-gray-200 transition-colors cursor-pointer">Bütün elanlar</a>
     <a class="hover:text-gray-200 transition-colors cursor-pointer">Avtokatalog</a>
     <a class="hover:text-gray-200 transition-colors cursor-pointer">Moto</a>
-    <a class="hover:text-gray-200 transition-colors cursor-pointer">Seçilmişlər</a>
+    <a routerLink="/favorites" class="hover:text-gray-200 transition-colors cursor-pointer">
+  Seçilmişlər
+    </a>
+
 
     <!-- ✅ Yalnız login olduqda görünəcək -->
-    <ng-container *ngIf="authService.isLoggedIn()">
+    <ng-container *ngIf="isLoggedIn()">
       <a routerLink="/add-car"
          class="hover:text-gray-200 transition-colors cursor-pointer">
         Yeni Elan
@@ -68,7 +73,7 @@
 
     <!-- Mobile Auth Buttons -->
     <div class="flex flex-col space-y-2 mt-4 w-full">
-      <ng-container *ngIf="!authService.isLoggedIn(); else mobileLoggedIn">
+      <ng-container *ngIf="!isLoggedIn(); else mobileLoggedIn">
         <a routerLink="/login"
            class="block w-full px-3 py-2 rounded bg-white text-blue-600 font-medium hover:bg-gray-200 transition text-center">
           Login

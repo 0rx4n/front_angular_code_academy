@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable, map, startWith } from 'rxjs';
+import { Observable, map, startWith, finalize } from 'rxjs';
 import { Post } from '../../models/post';
 import { PostService } from '../../core/services/post.service';
 import { FilterBar, Filters } from '../../shared/components/filter-bar/filter-bar';
@@ -17,6 +17,7 @@ import { CarGrid } from '../../shared/components/car-grid/car-grid';
 export class Home implements OnInit {
   posts$!: Observable<Post[]>;
   filteredPosts$!: Observable<Post[]>;
+  loading = true;   // 🔑 yüklənmə state-i
 
   marka = '';
   model = '';
@@ -35,7 +36,10 @@ export class Home implements OnInit {
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
-    this.posts$ = this.postService.getPosts();
+    this.posts$ = this.postService.getPosts().pipe(
+      finalize(() => this.loading = false) // 🔑 yüklənmə bitdi
+    );
+
     this.filteredPosts$ = this.posts$.pipe(
       map(posts => {
         this.markaOptions = this.getUniqueValues('marka', posts);
@@ -82,21 +86,20 @@ export class Home implements OnInit {
     );
   }
 
-private filterPosts(posts: Post[]): Post[] {
-  return posts.filter((post) => {
-    const meetsPriceMin = this.minPrice == null || post.price >= this.minPrice;
-    const meetsPriceMax = this.maxPrice == null || post.price <= this.maxPrice;
-    const meetsMarka = !this.marka || post.marka.toLowerCase().includes(this.marka.toLowerCase());
-    const meetsModel = !this.model || post.model.toLowerCase().includes(this.model.toLowerCase());
-    const meetsCity  = !this.city  || post.city.toLowerCase().includes(this.city.toLowerCase());
-    const meetsBan   = !this.ban   || post.ban.toLowerCase().includes(this.ban.toLowerCase());
-    const meetsYearMin = this.minYear == null || +post.year >= this.minYear;
-    const meetsYearMax = this.maxYear == null || +post.year <= this.maxYear;
+  private filterPosts(posts: Post[]): Post[] {
+    return posts.filter((post) => {
+      const meetsPriceMin = this.minPrice == null || post.price >= this.minPrice;
+      const meetsPriceMax = this.maxPrice == null || post.price <= this.maxPrice;
+      const meetsMarka = !this.marka || post.marka.toLowerCase().includes(this.marka.toLowerCase());
+      const meetsModel = !this.model || post.model.toLowerCase().includes(this.model.toLowerCase());
+      const meetsCity  = !this.city  || post.city.toLowerCase().includes(this.city.toLowerCase());
+      const meetsBan   = !this.ban   || post.ban.toLowerCase().includes(this.ban.toLowerCase());
+      const meetsYearMin = this.minYear == null || +post.year >= this.minYear;
+      const meetsYearMax = this.maxYear == null || +post.year <= this.maxYear;
 
-    return meetsPriceMin && meetsPriceMax &&
-           meetsMarka && meetsModel && meetsCity && meetsBan &&
-           meetsYearMin && meetsYearMax;
-  });
-}
-
+      return meetsPriceMin && meetsPriceMax &&
+             meetsMarka && meetsModel && meetsCity && meetsBan &&
+             meetsYearMin && meetsYearMax;
+    });
+  }
 }
